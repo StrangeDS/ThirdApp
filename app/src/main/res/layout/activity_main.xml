@@ -13,10 +13,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:ems="10"
+
+        android:hint="@string/inpword"
         android:importantForAutofill="no"
         android:inputType="numberSigned|number"
         android:padding="20dp"
-        android:hint="@string/inpword"
         android:text="" />
 
     <Button
