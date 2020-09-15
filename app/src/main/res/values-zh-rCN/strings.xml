@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ThirdApp</string>
-    <string name="btnword">转换为华氏温度</string>
-    <string name="oupword">结果为：</string>
-    <string name="inpword">请输入摄氏度</string>
+    <string name="score">得分:0</string>
+    <string name="name">A队</string>
+    <string name="btn0">清零</string>
 </resources>

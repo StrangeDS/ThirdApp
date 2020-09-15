@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">ThirdApp</string>
-    <string name="inpword">Please input number in°C</string>
-    <string name="btnword">Convert it to °F</string>
-    <string name="oupword">result:</string>
+    <string name="name">Team A</string>
+    <string name="score">score:0</string>
+    <string name="btn1" translatable="false">+1</string>
+    <string name="btn2" translatable="false">+2</string>
+    <string name="btn3" translatable="false">+3</string>
+    <string name="btn0">clear</string>
+    <string name="btnr1" translatable="false">-1</string>
 </resources>
