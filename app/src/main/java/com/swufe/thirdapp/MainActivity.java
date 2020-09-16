@@ -19,33 +19,38 @@ public class MainActivity extends AppCompatActivity {
 
     public  void btn1(View v){
         TextView score = findViewById(R.id.score);
+        String res = score.getText().toString().split(":")[0];
         int score_new = Integer.parseInt(score.getText().toString().split(":")[1]) + 1;
-        score.setText("得分:"+ score_new);
+        score.setText(res +":"+ score_new);
     }
 
     public  void btn2(View v){
         TextView score = findViewById(R.id.score);
+        String res = score.getText().toString().split(":")[0];
         int score_new = Integer.parseInt(score.getText().toString().split(":")[1]) + 2;
-        score.setText("得分:"+ score_new);
+        score.setText(res +":"+ score_new);
     }
 
     public  void btn3(View v){
         TextView score = findViewById(R.id.score);
+        String res = score.getText().toString().split(":")[0];
         int score_new = Integer.parseInt(score.getText().toString().split(":")[1]) + 3;
-        score.setText("得分:"+ score_new);
+        score.setText(res +":"+ score_new);
     }
 
     public  void btn0(View v){
         TextView score = findViewById(R.id.score);
-        score.setText("得分:0");
+        String res = score.getText().toString().split(":")[0];
+        score.setText(res +":0");
     }
 
     public  void btnr1(View v){
         TextView score = findViewById(R.id.score);
+        String res = score.getText().toString().split(":")[0];
         int score_new = Integer.parseInt(score.getText().toString().split(":")[1]) - 1;
         if(score_new < 0){
             score_new = 0;
         }
-        score.setText("得分:"+ score_new);
+        score.setText(res +":"+ score_new);
     }
 }
