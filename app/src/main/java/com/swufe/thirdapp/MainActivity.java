@@ -1,5 +1,6 @@
 package com.swufe.thirdapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -16,52 +17,51 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public  void btn1add1(View v){
-        TextView score = findViewById(R.id.score1);
-        String res = score.getText().toString();
-        int score_new = Integer.parseInt(res) + 1;
-        score.setText("" + score_new);
+    public  void btn1(View v){
+        TextView input = findViewById(R.id.inp);
+        TextView output = findViewById(R.id.outp);
+        Button b = findViewById(R.id.btn1);
+        String str = input.getText().toString();
+        if(str.isEmpty()){
+            output.setText("0");
+        }
+        else{
+            float result = Float.parseFloat(str);
+            float rate = Float.parseFloat(b.getText().toString().split(":")[1]);
+            result = result * rate;
+            output.setText("" + result);
+        }
     }
 
-    public  void btn1add2(View v){
-        TextView score = findViewById(R.id.score1);
-        String res = score.getText().toString();
-        int score_new = Integer.parseInt(res) + 2;
-        score.setText("" + score_new);
+    public  void btn2(View v){
+        TextView input = findViewById(R.id.inp);
+        TextView output = findViewById(R.id.outp);
+        Button b = findViewById(R.id.btn2);
+        String str = input.getText().toString();
+        if(str.isEmpty()){
+            output.setText("0");
+        }
+        else{
+            float result = Float.parseFloat(str);
+            float rate = Float.parseFloat(b.getText().toString().split(":")[1]);
+            result = result * rate;
+            output.setText("" + result);
+        }
     }
 
-    public  void btn1add3(View v){
-        TextView score = findViewById(R.id.score1);
-        String res = score.getText().toString();
-        int score_new = Integer.parseInt(res) + 3;
-        score.setText("" + score_new);
-    }
-
-    public  void btn2add1(View v){
-        TextView score = findViewById(R.id.score2);
-        String res = score.getText().toString();
-        int score_new = Integer.parseInt(res) + 1;
-        score.setText("" + score_new);
-    }
-
-    public  void btn2add2(View v){
-        TextView score = findViewById(R.id.score2);
-        String res = score.getText().toString();
-        int score_new = Integer.parseInt(res) + 2;
-        score.setText("" + score_new);
-    }
-
-    public  void btn2add3(View v){
-        TextView score = findViewById(R.id.score2);
-        String res = score.getText().toString();
-        int score_new = Integer.parseInt(res) + 3;
-        score.setText("" + score_new);
-    }
-
-    public  void btn0(View v){
-        TextView score1 = findViewById(R.id.score1);
-        TextView score2 = findViewById(R.id.score2);
-        score1.setText("0");
-        score2.setText("0");
+    public  void btn3(View v){
+        TextView input = findViewById(R.id.inp);
+        TextView output = findViewById(R.id.outp);
+        Button b = findViewById(R.id.btn3);
+        String str = input.getText().toString();
+        if(str.isEmpty()){
+            output.setText("0");
+        }
+        else{
+            float result = Float.parseFloat(str);
+            float rate = Float.parseFloat(b.getText().toString().split(":")[1]);
+            result = result * rate;
+            output.setText("" + result);
+        }
     }
 }

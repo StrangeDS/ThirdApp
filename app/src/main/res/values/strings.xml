@@ -1,11 +1,8 @@
 <resources>
     <string name="app_name">ThirdApp</string>
-    <string name="name1">Team A</string>
-    <string name="score1" translatable="false">0</string>
-    <string name="btn1">FREE THROW</string>
-    <string name="btn2">+2 POINTS</string>
-    <string name="btn3">+3 POINTS</string>
-    <string name="btn0">reset</string>
-    <string name="name2">Team B</string>
-    <string name="score2" translatable="false">0</string>
+    <string name="tips">Convert CNY to ...</string>
+    <string name="welcome">Hello！</string>
+    <string name="D1">USD rate:0.147894</string>
+    <string name="D2">GBP rate:0.114358</string>
+    <string name="D3">EUR rate:0.124778</string>
 </resources>
