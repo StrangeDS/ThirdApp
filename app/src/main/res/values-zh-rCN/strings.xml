@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ThirdApp</string>
-    <string name="score">得分:0</string>
-    <string name="name">A队</string>
-    <string name="btn0">清零</string>
+    <string name="name1">A队</string>
+    <string name="btn0">重置</string>
+    <string name="name2">B队</string>
+    <string name="btn1" translatable="false">罚球</string>
+    <string name="btn2">+2分</string>
+    <string name="btn3">+3分</string>
 </resources>

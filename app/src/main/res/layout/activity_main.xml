@@ -3,91 +3,160 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:layout_width="80dp"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/name1"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/score1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/score1"
+                android:textSize="50sp" />
+
+            <Button
+                android:id="@+id/btn1-3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginRight="24dp"
+                android:background="#FF8C00"
+                android:gravity="center"
+                android:onClick="btn1add3"
+                android:text="@string/btn3" />
+
+            <Button
+                android:id="@+id/btn1-2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="24dp"
+                android:background="#FF8C00"
+                android:gravity="center"
+                android:onClick="btn1add2"
+                android:text="@string/btn2" />
+
+            <Button
+                android:id="@+id/btn1-1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginTop="8dp"
+                android:background="#FF8C00"
+                android:gravity="center"
+                android:onClick="btn1add1"
+                android:text="@string/btn1" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="#BDB4B4" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/name2"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/score2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="@string/score2"
+                android:textSize="50sp" />
+
+            <Button
+                android:id="@+id/btn2-3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginRight="24dp"
+                android:background="#FF8C00"
+                android:gravity="center"
+                android:onClick="btn2add3"
+                android:text="@string/btn3" />
+
+            <Button
+                android:id="@+id/btn2-2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="24dp"
+                android:background="#FF8C00"
+                android:gravity="center"
+                android:onClick="btn2add2"
+                android:text="@string/btn2" />
+
+            <Button
+                android:id="@+id/btn2-1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="24dp"
+                android:background="#FF8C00"
+                android:gravity="center"
+                android:onClick="btn2add1"
+                android:text="@string/btn1" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btn0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="450dp"
-            android:gravity="center"
-            android:onClick="btn0"
-            android:text="@string/btn0" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="5dp"
-            android:gravity="center"
-            android:text="@string/name"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/score"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:text="@string/score"
-            android:textSize="30sp" />
-
-        <Button
-            android:id="@+id/btn1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="45dp"
-            android:gravity="center"
-            android:onClick="btn1"
-            android:text="@string/btn1" />
-
-        <Button
-            android:id="@+id/btn2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:onClick="btn2"
-            android:text="@string/btn2" />
-
-        <Button
-            android:id="@+id/btn3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
-            android:onClick="btn3"
-            android:text="@string/btn3" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="80dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btn-1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="450dp"
-            android:gravity="center"
-            android:onClick="btnr1"
-            android:text="@string/btnr1" />
-    </LinearLayout>
+        android:layout_gravity="center"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="32dp"
+        android:background="#FF8C00"
+        android:onClick="btn0"
+        android:text="@string/btn0" />
 
 </LinearLayout>
