@@ -2,8 +2,10 @@
 <resources>
     <string name="app_name">ThirdApp</string>
     <string name="tips">输入要转换的金额</string>
-    <string name="D1">美元汇率:0.147894</string>
+    <string name="D1">美元</string>
     <string name="welcome">欢迎使用！</string>
-    <string name="D2">英镑汇率:0.114358</string>
-    <string name="D3">欧元汇率:0.124778</string>
+    <string name="D2">英镑</string>
+    <string name="D3">欧元</string>
+    <string name="config">配置汇率</string>
+    <string name="save">保存</string>
 </resources>

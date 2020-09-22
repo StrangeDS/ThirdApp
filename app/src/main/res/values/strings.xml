@@ -2,7 +2,9 @@
     <string name="app_name">ThirdApp</string>
     <string name="tips">Convert CNY to ...</string>
     <string name="welcome">Hello！</string>
-    <string name="D1">USD rate:0.147894</string>
-    <string name="D2">GBP rate:0.114358</string>
-    <string name="D3">EUR rate:0.124778</string>
+    <string name="D1">USD</string>
+    <string name="D2">GBP</string>
+    <string name="D3">EUR</string>
+    <string name="config">Config</string>
+    <string name="save">Save</string>
 </resources>

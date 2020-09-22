@@ -35,30 +35,39 @@
         android:id="@+id/btn1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:onClick="btn1"
+        android:layout_marginBottom="15dp"
+        android:onClick="btn"
         android:text="@string/D1" />
 
     <Button
         android:id="@+id/btn2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:onClick="btn2"
+        android:layout_marginBottom="15dp"
+        android:onClick="btn"
         android:text="@string/D2" />
 
     <Button
         android:id="@+id/btn3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
-        android:onClick="btn3"
+        android:layout_marginBottom="25dp"
+        android:onClick="btn"
         android:text="@string/D3" />
+
+    <Button
+        android:id="@+id/btn_config"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:onClick="btn_conifg"
+        android:text="@string/config" />
 
 </LinearLayout>
