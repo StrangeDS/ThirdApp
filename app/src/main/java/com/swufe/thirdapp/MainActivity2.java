@@ -2,7 +2,9 @@ package com.swufe.thirdapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -44,6 +46,13 @@ public class MainActivity2 extends AppCompatActivity {
         rate.putFloat("euro_rate", euro);
         config.putExtras(rate);
         setResult(2,config);
+
+        SharedPreferences sp = getSharedPreferences("rate", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putFloat("dollar_rate", dollar);
+        editor.putFloat("pound_rate", pound);
+        editor.putFloat("euro_rate", euro);
+        editor.apply();
         finish();
     }
 }
