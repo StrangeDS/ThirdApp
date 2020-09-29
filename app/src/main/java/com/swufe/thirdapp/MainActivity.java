@@ -140,6 +140,21 @@ public class MainActivity extends AppCompatActivity implements Runnable{
         return out.toString();
     }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        float num = Float.parseFloat(((TextView)findViewById(R.id.inp)).getText().toString());
+        Log.i("TAG", "已旋转");
+        outState.putFloat("num", num);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        float num = savedInstanceState.getFloat("num");
+        ((TextView)findViewById(R.id.inp)).setText(""+num);
+    }
+
     private String getRate(String type, String html){
         int i = html.indexOf(type + "</a></td>");
         String str = html.substring(i,i+150);
