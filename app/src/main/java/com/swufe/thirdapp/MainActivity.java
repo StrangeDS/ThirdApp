@@ -143,7 +143,11 @@ public class MainActivity extends AppCompatActivity implements Runnable{
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        float num = Float.parseFloat(((TextView)findViewById(R.id.inp)).getText().toString());
+        String str = ((TextView)findViewById(R.id.inp)).getText().toString();
+        if (str.isEmpty()){
+            str = "0";
+        }
+        float num = Float.parseFloat(str);
         Log.i("TAG", "已旋转");
         outState.putFloat("num", num);
     }
