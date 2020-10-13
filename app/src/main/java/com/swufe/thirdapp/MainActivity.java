@@ -19,6 +19,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,38 +31,62 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements Runnable{
     Handler handler = new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
             if(msg.what==5){
-                String str =  (String)msg.obj;
+                HashMap<String, Float> rate =  (HashMap<String, Float>)msg.obj;
 //                Log.i("TAG", "handleMessage: getMessage msg = "+str);
-                dollar = Float.parseFloat(str.split(",")[0]);
-                pound = Float.parseFloat(str.split(",")[1]);
-                euro = Float.parseFloat(str.split(",")[2]);
+                dollar = rate.get("美元");
+                pound = rate.get("英镑");
+                euro = rate.get("欧元");
+                sp = getSharedPreferences("rate", MODE_PRIVATE);
+//                Log.i("TAG", "rate = " + dollar + "," + pound + "," + euro);
+                Toast.makeText(MainActivity.this, "从网络更新数据中……", Toast.LENGTH_SHORT).show();
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putFloat("dollar_rate", dollar);
+                editor.putFloat("pound_rate", pound);
+                editor.putFloat("euro_rate", euro);
+                editor.apply();
+                Toast.makeText(MainActivity.this, "已完成更新", Toast.LENGTH_SHORT).show();
             }
             super.handleMessage(msg);
+        }
+    };
+    private Runnable runnable = new Runnable() {
+        public void run() {
+            this.update();
+            handler.postDelayed(this, 1000 * 60 * 60 * 24);// 间隔24小时
+        }
+        void update() {
+            //刷新msg的内容
+            Thread t = new Thread(MainActivity.this);
+            t.start();
         }
     };
     URL url;
     float dollar;
     float pound;
     float euro;
+    SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sp = getSharedPreferences("rate", MODE_PRIVATE);
         setContentView(R.layout.activity_main);
-        Thread t = new Thread(this);
-        t.start();
-        Toast.makeText(this, "已更新实时数据", Toast.LENGTH_SHORT).show();
-        dollar = sp.getFloat("dollar_rate", dollar);
-        pound = sp.getFloat("pound_rate", pound);
-        euro = sp.getFloat("euro_rate", euro);
-        Toast.makeText(this, "已配置本地数据", Toast.LENGTH_SHORT).show();
+        sp = getSharedPreferences("rate", MODE_PRIVATE);
+        Toast.makeText(this, "读取本地数据", Toast.LENGTH_SHORT).show();
+        dollar = sp.getFloat("dollar_rate", 1);
+        pound = sp.getFloat("pound_rate", 1);
+        euro = sp.getFloat("euro_rate", 1);
+        Log.i("TAG", "rate = " + dollar + "," + pound + "," + euro);
+        handler.postDelayed(runnable, 1000 * 60 * 60 * 24);//24小时之后
     }
 
     public  void btn(View v){
@@ -90,6 +119,11 @@ public class MainActivity extends AppCompatActivity implements Runnable{
         startActivityForResult(config,1);
     }
 
+    public  void btn_show(View v){
+        Intent config = new Intent(this, MainActivity3.class);
+        startActivity(config);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode==1 && resultCode==2){
@@ -107,20 +141,46 @@ public class MainActivity extends AppCompatActivity implements Runnable{
     @Override
     public void run() {
         Message msg = handler.obtainMessage(5);
-        try {
-            url = new URL("http://www.usd-cny.com/bankofchina.htm");
-            HttpURLConnection http = (HttpURLConnection) url.openConnection();
-            InputStream in = http.getInputStream();
-            String html = inputStream2String(in);
-            html = html.replaceAll("[\\s\\t\\n\\r]", "");
-            html = getRate("美元", html) + "," + getRate("英镑", html) + "," + getRate("欧元", html);
-//            Log.i("TAG","run:html = "+html);
-            msg.obj = html;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        HashMap<String,Float> rate = new HashMap<String,Float>();
+        try{
+            String url = "http://www.usd-cny.com/bankofchina.htm";
+            Document doc = Jsoup.connect(url).get();
+//            Log.i("TAG", "run: " + doc.title());
+            Elements tables = doc.getElementsByTag("table");
+            Element table6 = tables.get(0);
+            //获取TD中的数据
+            Elements tds = table6.getElementsByTag("td");
+            for(int i=0;i<tds.size();i+=6){
+                Element td1 = tds.get(i);
+                Element td2 = tds.get(i+5);
+                String str1 = td1.text();
+                String val = td2.text();
+//                Log.i("TAG", "run: " + str1 + "==>" + val);
+                float v = 100f / Float.parseFloat(val);
+                if(str1.equals("美元") || str1.equals("英镑") || str1.equals("欧元")){
+                    rate.put(str1, v);
+                }
+                //获取数据并返回……
+            }
+            msg.obj = rate;
         } catch (IOException e) {
             e.printStackTrace();
         }
+//        自写的文本处理（已废弃）
+//        try {
+//            url = new URL("http://www.usd-cny.com/bankofchina.htm");
+//            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+//            InputStream in = http.getInputStream();
+//            String html = inputStream2String(in);
+//            html = html.replaceAll("[\\s\\t\\n\\r]", "");
+//            html = getRate("美元", html) + "," + getRate("英镑", html) + "," + getRate("欧元", html);
+////            Log.i("TAG","run:html = "+html);
+//            msg.obj = html;
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 //        msg.obj = "Hello from run()";
         handler.sendMessage(msg);
     }
@@ -148,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements Runnable{
             str = "0";
         }
         float num = Float.parseFloat(str);
-        Log.i("TAG", "已旋转");
+//        Log.i("TAG", "已旋转");
         outState.putFloat("num", num);
     }
 
@@ -159,12 +219,13 @@ public class MainActivity extends AppCompatActivity implements Runnable{
         ((TextView)findViewById(R.id.inp)).setText(""+num);
     }
 
-    private String getRate(String type, String html){
-        int i = html.indexOf(type + "</a></td>");
-        String str = html.substring(i,i+150);
-        str = str.split("<td>")[5].split("</td>")[0];
-//        Log.i("TAG", "str: "+ str);
-        float rate = 100/Float.parseFloat(str);
-        return ""+rate;
-    }
+//    废弃函数
+//    private String getRate(String type, String html){
+//        int i = html.indexOf(type + "</a></td>");
+//        String str = html.substring(i,i+150);
+//        str = str.split("<td>")[5].split("</td>")[0];
+////        Log.i("TAG", "str: "+ str);
+//        float rate = 100/Float.parseFloat(str);
+//        return ""+rate;
+//    }
 }

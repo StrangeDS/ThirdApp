@@ -8,4 +8,5 @@
     <string name="D3">欧元</string>
     <string name="config">配置汇率</string>
     <string name="save">保存</string>
+    <string name="show">查看所有汇率</string>
 </resources>
