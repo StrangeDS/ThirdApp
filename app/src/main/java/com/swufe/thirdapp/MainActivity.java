@@ -31,7 +31,11 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,21 +63,23 @@ public class MainActivity extends AppCompatActivity implements Runnable{
             super.handleMessage(msg);
         }
     };
-    private Runnable runnable = new Runnable() {
-        public void run() {
-            this.update();
-            handler.postDelayed(this, 1000 * 60 * 60 * 24);// 间隔24小时
-        }
-        void update() {
-            //刷新msg的内容
-            Thread t = new Thread(MainActivity.this);
-            t.start();
-        }
-    };
+//    private Runnable runnable = new Runnable() {//废弃的更新代码
+//        public void run() {
+//            this.update();
+//            handler.postDelayed(this, 1000 * 60 * 60 * 24);// 间隔24小时
+//        }
+//        void update() {
+//            //刷新msg的内容
+//            Thread t = new Thread(MainActivity.this);
+//            t.start();
+//        }
+//    };
     URL url;
     float dollar;
     float pound;
     float euro;
+    String last;
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     SharedPreferences sp;
 
     @Override
@@ -85,8 +91,11 @@ public class MainActivity extends AppCompatActivity implements Runnable{
         dollar = sp.getFloat("dollar_rate", 1);
         pound = sp.getFloat("pound_rate", 1);
         euro = sp.getFloat("euro_rate", 1);
+        last = sp.getString("date_last", "2020-10-16 00:20:23");
+        Thread t = new Thread(MainActivity.this);
+        t.start();
 //        Log.i("TAG", "rate = " + dollar + "," + pound + "," + euro);
-        handler.postDelayed(runnable, 1000 * 60 * 60 * 24);//24小时之后
+//        handler.postDelayed(runnable, 1000 * 60 * 60 * 24);//废弃的方法
     }
 
     public  void btn(View v){
@@ -132,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements Runnable{
             dollar = rate.getFloat("dollar_rate", 0.0f);
             pound = rate.getFloat("pound_rate", 0.0f);
             euro = rate.getFloat("euro_rate", 0.0f);
-            Log.i("TAG","dollar_rate=" + dollar);
+//            Log.i("TAG","dollar_rate=" + dollar);
             Toast.makeText(this, "配置已更新", Toast.LENGTH_SHORT).show();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -140,32 +149,51 @@ public class MainActivity extends AppCompatActivity implements Runnable{
 
     @Override
     public void run() {
-        Message msg = handler.obtainMessage(5);
-        HashMap<String,Float> rate = new HashMap<String,Float>();
-        try{
-            String url = "http://www.usd-cny.com/bankofchina.htm";
-            Document doc = Jsoup.connect(url).get();
-//            Log.i("TAG", "run: " + doc.title());
-            Elements tables = doc.getElementsByTag("table");
-            Element table6 = tables.get(0);
-            //获取TD中的数据
-            Elements tds = table6.getElementsByTag("td");
-            for(int i=0;i<tds.size();i+=6){
-                Element td1 = tds.get(i);
-                Element td2 = tds.get(i+5);
-                String str1 = td1.text();
-                String val = td2.text();
-//                Log.i("TAG", "run: " + str1 + "==>" + val);
-                float v = 100f / Float.parseFloat(val);
-                if(str1.equals("美元") || str1.equals("英镑") || str1.equals("欧元")){
-                    rate.put(str1, v);
-                }
-                //获取数据并返回……
-            }
-            msg.obj = rate;
-        } catch (IOException e) {
+        Date date_now = new Date();
+        String now = df.format(new Date());
+        long days = 0;
+        try {
+            Date date_last = df.parse(last);
+            long diff = date_now.getTime() - date_last.getTime();
+            days = diff / (1000 * 60 * 60 * 24);
+        } catch (ParseException e) {
             e.printStackTrace();
         }
+        if(days >= 1 ){
+            Message msg = handler.obtainMessage(5);
+            HashMap<String,Float> rate = new HashMap<String,Float>();
+            try{
+                String url = "http://www.usd-cny.com/bankofchina.htm";
+                Document doc = Jsoup.connect(url).get();
+//            Log.i("TAG", "run: " + doc.title());
+                Elements tables = doc.getElementsByTag("table");
+                Element table6 = tables.get(0);
+                //获取TD中的数据
+                Elements tds = table6.getElementsByTag("td");
+                for(int i=0;i<tds.size();i+=6){
+                    Element td1 = tds.get(i);
+                    Element td2 = tds.get(i+5);
+                    String str1 = td1.text();
+                    String val = td2.text();
+//                Log.i("TAG", "run: " + str1 + "==>" + val);
+                    float v = 100f / Float.parseFloat(val);
+                    if(str1.equals("美元") || str1.equals("英镑") || str1.equals("欧元")){
+                        rate.put(str1, v);
+                    }
+                    //获取数据并返回……
+                }
+                msg.obj = rate;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            sp = getSharedPreferences("rate", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString("date_last", now);
+            handler.sendMessage(msg);
+        }else{
+//            Log.i("TAG","距离上次更新不到一天");
+        }
+
 //        自写的文本处理（已废弃）
 //        try {
 //            url = new URL("http://www.usd-cny.com/bankofchina.htm");
@@ -182,7 +210,6 @@ public class MainActivity extends AppCompatActivity implements Runnable{
 //            e.printStackTrace();
 //        }
 //        msg.obj = "Hello from run()";
-        handler.sendMessage(msg);
     }
 
 //    废弃函数
