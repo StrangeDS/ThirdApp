@@ -41,8 +41,12 @@ public class SingleActivity extends AppCompatActivity {
         public void afterTextChanged(Editable editable) {
             EditText input = (EditText)findViewById(R.id.inp);
             TextView result = (TextView)findViewById(R.id.res);
-            float f = Float.parseFloat(input.getText().toString());
-            result.setText(""+f * rate);
+            if(!input.getText().toString().isEmpty()){
+                float f = Float.parseFloat(input.getText().toString());
+                result.setText(""+ f * rate);
+            }else{
+                result.setText("");
+            }
         }
     };
 }

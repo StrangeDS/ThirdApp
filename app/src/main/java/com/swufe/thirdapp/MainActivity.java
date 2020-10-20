@@ -41,29 +41,33 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements Runnable{
-    Handler handler = new Handler(){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            if(msg.what==5){
-                HashMap<String, Float> rate =  (HashMap<String, Float>)msg.obj;
-//                Log.i("TAG", "handleMessage: getMessage msg = "+str);
-                dollar = rate.get("美元");
-                pound = rate.get("英镑");
-                euro = rate.get("欧元");
-                sp = getSharedPreferences("rate", MODE_PRIVATE);
-//                Log.i("TAG", "rate = " + dollar + "," + pound + "," + euro);
-                Toast.makeText(MainActivity.this, "从网络更新数据中……", Toast.LENGTH_SHORT).show();
-                SharedPreferences.Editor editor = sp.edit();
-                editor.putFloat("dollar_rate", dollar);
-                editor.putFloat("pound_rate", pound);
-                editor.putFloat("euro_rate", euro);
-                editor.apply();
-                Toast.makeText(MainActivity.this, "已完成更新", Toast.LENGTH_SHORT).show();
-            }
-            super.handleMessage(msg);
-        }
-    };
-//    private Runnable runnable = new Runnable() {//废弃的更新代码
+
+    //handle现在不再使用
+//    Handler handler = new Handler(){
+//        @Override
+//        public void handleMessage(@NonNull Message msg) {
+//            if(msg.what==5){
+//                HashMap<String, Float> rate =  (HashMap<String, Float>)msg.obj;
+////                Log.i("TAG", "handleMessage: getMessage msg = "+str);
+//                dollar = rate.get("美元");
+//                pound = rate.get("英镑");
+//                euro = rate.get("欧元");
+//                sp = getSharedPreferences("rate", MODE_PRIVATE);
+////                Log.i("TAG", "rate = " + dollar + "," + pound + "," + euro);
+//                Toast.makeText(MainActivity.this, "从网络更新数据中……", Toast.LENGTH_SHORT).show();
+//                SharedPreferences.Editor editor = sp.edit();
+//                editor.putFloat("dollar_rate", dollar);
+//                editor.putFloat("pound_rate", pound);
+//                editor.putFloat("euro_rate", euro);
+//                editor.apply();
+//                Toast.makeText(MainActivity.this, "已完成更新", Toast.LENGTH_SHORT).show();
+//            }
+//            super.handleMessage(msg);
+//        }
+//    };
+
+    //废弃的更新代码
+//    private Runnable runnable = new Runnable() {
 //        public void run() {
 //            this.update();
 //            handler.postDelayed(this, 1000 * 60 * 60 * 24);// 间隔24小时
@@ -80,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements Runnable{
     float euro;
     String last;
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    SharedPreferences sp;
+    SharedPreferences sp = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +92,16 @@ public class MainActivity extends AppCompatActivity implements Runnable{
         setContentView(R.layout.activity_main);
         sp = getSharedPreferences("rate", MODE_PRIVATE);
         Toast.makeText(this, "读取本地数据", Toast.LENGTH_SHORT).show();
-        dollar = sp.getFloat("dollar_rate", 1);
-        pound = sp.getFloat("pound_rate", 1);
-        euro = sp.getFloat("euro_rate", 1);
+        RateManager rateManager = new RateManager(MainActivity.this);
+        RateItem item = rateManager.findByName("美元");
+        dollar = Float.parseFloat(item.getRate());
+        item = rateManager.findByName("英镑");
+        pound = Float.parseFloat(item.getRate());
+        item = rateManager.findByName("欧元");
+        euro = Float.parseFloat(item.getRate());
+//        dollar = sp.getFloat("dollar_rate", 1);
+//        pound = sp.getFloat("pound_rate", 1);
+//        euro = sp.getFloat("euro_rate", 1);
         last = sp.getString("date_last", "2020-10-16 00:20:23");
         Thread t = new Thread(MainActivity.this);
         t.start();
@@ -160,8 +171,7 @@ public class MainActivity extends AppCompatActivity implements Runnable{
             e.printStackTrace();
         }
         if(days >= 1 ){
-            Message msg = handler.obtainMessage(5);
-            HashMap<String,Float> rate = new HashMap<String,Float>();
+            List<RateItem> list = new ArrayList<>();
             try{
                 String url = "http://www.usd-cny.com/bankofchina.htm";
                 Document doc = Jsoup.connect(url).get();
@@ -173,23 +183,22 @@ public class MainActivity extends AppCompatActivity implements Runnable{
                 for(int i=0;i<tds.size();i+=6){
                     Element td1 = tds.get(i);
                     Element td2 = tds.get(i+5);
-                    String str1 = td1.text();
-                    String val = td2.text();
+                    RateItem item = new RateItem();
+                    item.setName(td1.text());
+                    float v = 100f / Float.parseFloat(td2.text());
+                    item.setRate("" + v);
+                    list.add(item);
 //                Log.i("TAG", "run: " + str1 + "==>" + val);
-                    float v = 100f / Float.parseFloat(val);
-                    if(str1.equals("美元") || str1.equals("英镑") || str1.equals("欧元")){
-                        rate.put(str1, v);
-                    }
-                    //获取数据并返回……
                 }
-                msg.obj = rate;
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            RateManager rateManager = new RateManager(MainActivity.this);
+            rateManager.deleteAll();
+            rateManager.addAll(list);
             sp = getSharedPreferences("rate", MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
             editor.putString("date_last", now);
-            handler.sendMessage(msg);
         }else{
 //            Log.i("TAG","距离上次更新不到一天");
         }

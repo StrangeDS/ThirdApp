@@ -38,32 +38,20 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity3 extends AppCompatActivity  implements Runnable, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener{
-    Handler handler = new Handler(){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            if(msg.what==7){
-                list1 = ( List<HashMap<String,String>>)msg.obj;
-                GridView listView = (GridView)findViewById(R.id.list1);
-                adapter = new SimpleAdapter(MainActivity3.this, list1, R.layout.activity_list_item, new String[] {"ItemTitle", "ItemDetail"}, new int[] {R.id.itemTitle, R.id.itemDetail});
-                listView.setAdapter(adapter);
-                listView.setEmptyView(findViewById(R.id.nodata));
-            }
-            super.handleMessage(msg);
-        }
-    };
     List<HashMap<String,String>> list1 = new ArrayList<HashMap<String, String>>();
-    SimpleAdapter adapter;
+    SimpleAdapter adapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Thread t = new Thread(this);
-        t.start();
         setContentView(R.layout.activity_main3);
 //        ListView listView = (ListView)findViewById(R.id.list1);
         GridView listView = (GridView)findViewById(R.id.list1);
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
+
+        Thread t = new Thread(this);
+        t.start();
 //        listView.setOnLongClickListener(new View.OnLongClickListener() {
 //            @Override
 //            public boolean onLongClick(View v) {
@@ -75,36 +63,52 @@ public class MainActivity3 extends AppCompatActivity  implements Runnable, Adapt
     }
 
     public void run() {
-        Message msg = handler.obtainMessage(7);
-        try {
-            List<HashMap<String,String>>  rate_list = new ArrayList<HashMap<String,String>>();
-            String url = "http://www.usd-cny.com/bankofchina.htm";
-            Document doc = Jsoup.connect(url).get();
-//            Log.i("TAG", "run: " + doc.title());
-            Elements tables = doc.getElementsByTag("table");
-            Element table6 = tables.get(0);
-            //获取TD中的数据
-            Elements tds = table6.getElementsByTag("td");
-            for(int i=0;i<tds.size();i+=6){
-                HashMap<String, String> map = new HashMap<String, String>();
-                Element td1 = tds.get(i);
-                Element td2 = tds.get(i+5);
-                String str1 = td1.text();
-                String val = td2.text();
-//                Log.i("TAG", "run: " + str1 + "==>" + val);
-                float v = 100f / Float.parseFloat(val);
-                map.put("ItemTitle", str1);
-                map.put("ItemDetail", ""+v);
-                rate_list.add(map);
-                //获取数据并返回……
-            }
-            msg.obj = rate_list;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        RateManager rateManager = new RateManager(this);
+        List<RateItem> list = new ArrayList<>();
+        list.addAll(rateManager.listAll());
+        for(RateItem item : list){
+            HashMap<String, String> i = new HashMap<>();
+            i.put("ItemTitle", item.getName());
+            i.put("ItemDetail", item.getRate());
+//            Log.i("TAG", "type:" + i.get("ItemTitle") + ",rate:" + i.get("ItemDetail"));
+            list1.add(i);
         }
-        handler.sendMessage(msg);
+//        View view= this.getLayoutInflater().inflate((R.layout.activity_main3), null);
+        GridView listView = (GridView)findViewById(R.id.list1);
+        adapter = new SimpleAdapter(MainActivity3.this, list1, R.layout.activity_list_item, new String[] {"ItemTitle", "ItemDetail"}, new int[] {R.id.itemTitle, R.id.itemDetail});
+        Log.i("TAG", "listview:" + listView);
+        Log.i("TAG", "adapter:" + adapter);
+        listView.setAdapter(adapter);
+        listView.setEmptyView(findViewById(R.id.nodata));
+//        try {
+//            List<HashMap<String,String>>  rate_list = new ArrayList<HashMap<String,String>>();
+//            String url = "http://www.usd-cny.com/bankofchina.htm";
+//            Document doc = Jsoup.connect(url).get();
+////            Log.i("TAG", "run: " + doc.title());
+//            Elements tables = doc.getElementsByTag("table");
+//            Element table6 = tables.get(0);
+//            //获取TD中的数据
+//            Elements tds = table6.getElementsByTag("td");
+//            for(int i=0;i<tds.size();i+=6){
+//                HashMap<String, String> map = new HashMap<String, String>();
+//                Element td1 = tds.get(i);
+//                Element td2 = tds.get(i+5);
+//                String str1 = td1.text();
+//                String val = td2.text();
+////                Log.i("TAG", "run: " + str1 + "==>" + val);
+//                float v = 100f / Float.parseFloat(val);
+//                map.put("ItemTitle", str1);
+//                map.put("ItemDetail", ""+v);
+//                rate_list.add(map);
+//                //获取数据并返回……
+//            }
+//            msg.obj = rate_list;
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        handler.sendMessage(msg);
     }
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id){
