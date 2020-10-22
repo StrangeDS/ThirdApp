@@ -92,19 +92,20 @@ public class MainActivity extends AppCompatActivity implements Runnable{
         setContentView(R.layout.activity_main);
         sp = getSharedPreferences("rate", MODE_PRIVATE);
         Toast.makeText(this, "读取本地数据", Toast.LENGTH_SHORT).show();
+        last = sp.getString("date_last", "2020-10-16 00:20:23");
+//        Log.i("TAG", "date_last = " + last);
         RateManager rateManager = new RateManager(MainActivity.this);
+        Thread t = new Thread(MainActivity.this);
+        t.start();
         RateItem item = rateManager.findByName("美元");
         dollar = Float.parseFloat(item.getRate());
         item = rateManager.findByName("英镑");
         pound = Float.parseFloat(item.getRate());
         item = rateManager.findByName("欧元");
         euro = Float.parseFloat(item.getRate());
-//        dollar = sp.getFloat("dollar_rate", 1);
-//        pound = sp.getFloat("pound_rate", 1);
-//        euro = sp.getFloat("euro_rate", 1);
-        last = sp.getString("date_last", "2020-10-16 00:20:23");
-        Thread t = new Thread(MainActivity.this);
-        t.start();
+        dollar = sp.getFloat("dollar_rate", 1);
+        pound = sp.getFloat("pound_rate", 1);
+        euro = sp.getFloat("euro_rate", 1);
 //        Log.i("TAG", "rate = " + dollar + "," + pound + "," + euro);
 //        handler.postDelayed(runnable, 1000 * 60 * 60 * 24);//废弃的方法
     }
@@ -164,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements Runnable{
         String now = df.format(new Date());
         long days = 0;
         try {
+            Log.i("TAG", "date_last = " + last);
             Date date_last = df.parse(last);
             long diff = date_now.getTime() - date_last.getTime();
             days = diff / (1000 * 60 * 60 * 24);
@@ -175,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements Runnable{
             try{
                 String url = "http://www.usd-cny.com/bankofchina.htm";
                 Document doc = Jsoup.connect(url).get();
-//            Log.i("TAG", "run: " + doc.title());
+//                Log.i("TAG", "run: " + doc.title());
                 Elements tables = doc.getElementsByTag("table");
                 Element table6 = tables.get(0);
                 //获取TD中的数据
@@ -183,12 +185,12 @@ public class MainActivity extends AppCompatActivity implements Runnable{
                 for(int i=0;i<tds.size();i+=6){
                     Element td1 = tds.get(i);
                     Element td2 = tds.get(i+5);
+//                    Log.i("TAG", "run: " + td1.text() + "==>" + td2.text());
                     RateItem item = new RateItem();
                     item.setName(td1.text());
                     float v = 100f / Float.parseFloat(td2.text());
                     item.setRate("" + v);
                     list.add(item);
-//                Log.i("TAG", "run: " + str1 + "==>" + val);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
