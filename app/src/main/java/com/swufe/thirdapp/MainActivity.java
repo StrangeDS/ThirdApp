@@ -94,18 +94,23 @@ public class MainActivity extends AppCompatActivity implements Runnable{
         Toast.makeText(this, "读取本地数据", Toast.LENGTH_SHORT).show();
         last = sp.getString("date_last", "2020-10-16 00:20:23");
 //        Log.i("TAG", "date_last = " + last);
-        RateManager rateManager = new RateManager(MainActivity.this);
         Thread t = new Thread(MainActivity.this);
         t.start();
+        try {
+            t.join(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        RateManager rateManager = new RateManager(MainActivity.this);
         RateItem item = rateManager.findByName("美元");
         dollar = Float.parseFloat(item.getRate());
         item = rateManager.findByName("英镑");
         pound = Float.parseFloat(item.getRate());
         item = rateManager.findByName("欧元");
         euro = Float.parseFloat(item.getRate());
-        dollar = sp.getFloat("dollar_rate", 1);
-        pound = sp.getFloat("pound_rate", 1);
-        euro = sp.getFloat("euro_rate", 1);
+//        dollar = sp.getFloat("dollar_rate", 1);
+//        pound = sp.getFloat("pound_rate", 1);
+//        euro = sp.getFloat("euro_rate", 1);
 //        Log.i("TAG", "rate = " + dollar + "," + pound + "," + euro);
 //        handler.postDelayed(runnable, 1000 * 60 * 60 * 24);//废弃的方法
     }
@@ -165,7 +170,6 @@ public class MainActivity extends AppCompatActivity implements Runnable{
         String now = df.format(new Date());
         long days = 0;
         try {
-            Log.i("TAG", "date_last = " + last);
             Date date_last = df.parse(last);
             long diff = date_now.getTime() - date_last.getTime();
             days = diff / (1000 * 60 * 60 * 24);
@@ -198,9 +202,9 @@ public class MainActivity extends AppCompatActivity implements Runnable{
             RateManager rateManager = new RateManager(MainActivity.this);
             rateManager.deleteAll();
             rateManager.addAll(list);
-            sp = getSharedPreferences("rate", MODE_PRIVATE);
             SharedPreferences.Editor editor = sp.edit();
             editor.putString("date_last", now);
+            editor.apply();
         }else{
 //            Log.i("TAG","距离上次更新不到一天");
         }
