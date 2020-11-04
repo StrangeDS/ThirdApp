@@ -1,4 +1,4 @@
-package com.swufe.thirdapp.useritem;
+package com.swufe.thirdapp.my;
 
 import android.content.Context;
 import android.view.LayoutInflater;

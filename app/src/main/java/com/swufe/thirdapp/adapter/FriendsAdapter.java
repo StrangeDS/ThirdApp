@@ -1,4 +1,4 @@
-package com.swufe.thirdapp.friendsadapter;
+package com.swufe.thirdapp.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

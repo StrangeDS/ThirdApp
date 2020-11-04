@@ -6,24 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import com.swufe.thirdapp.MainActivity;
 import com.swufe.thirdapp.R;
-import com.swufe.thirdapp.Talk;
+import com.swufe.thirdapp.activity.Talk;
 import com.swufe.thirdapp.refreshableview.RefreshableView;
-import com.swufe.thirdapp.slideadapter.SlideAdapter;
+import com.swufe.thirdapp.adapter.SlideAdapter;
 import com.swufe.thirdapp.slidelistview.SlideListView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class MainFragment extends Fragment {

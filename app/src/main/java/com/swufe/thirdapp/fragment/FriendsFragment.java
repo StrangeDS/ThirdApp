@@ -14,8 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.swufe.thirdapp.R;
-import com.swufe.thirdapp.Talk;
-import com.swufe.thirdapp.friendsadapter.FriendsAdapter;
+import com.swufe.thirdapp.activity.Talk;
+import com.swufe.thirdapp.adapter.FriendsAdapter;
 
 public class FriendsFragment extends Fragment {
     private ExpandableListView elvCompany;

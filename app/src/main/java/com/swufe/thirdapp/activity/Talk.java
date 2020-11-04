@@ -1,4 +1,4 @@
-package com.swufe.thirdapp;
+package com.swufe.thirdapp.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -16,8 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.swufe.thirdapp.R;
 import com.swufe.thirdapp.adapter.TalkAdapter;
-import com.swufe.thirdapp.avatar.CircleDrawable;
 import com.swufe.thirdapp.ui.login.LoginActivity;
 
 import java.util.ArrayList;

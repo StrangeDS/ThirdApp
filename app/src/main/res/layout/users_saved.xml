@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.swufe.thirdapp.myedittext.MyEditText
+    <com.swufe.thirdapp.my.MyEditText
         android:id="@+id/username"
         android:layout_width="match_parent"
         android:focusable="false"

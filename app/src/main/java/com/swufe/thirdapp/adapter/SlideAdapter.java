@@ -1,23 +1,19 @@
-package com.swufe.thirdapp.slideadapter;
+package com.swufe.thirdapp.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.swufe.thirdapp.R;
-import com.swufe.thirdapp.Talk;
 import com.swufe.thirdapp.slidelistview.SlideItem;
 
 import java.util.List;
-import java.util.Map;
 
-public class SlideAdapter extends BaseAdapter implements View.OnClickListener{
+public class SlideAdapter extends BaseAdapter{
 
     private List<String> dataList;
     private Context context;
@@ -30,21 +26,21 @@ public class SlideAdapter extends BaseAdapter implements View.OnClickListener{
 
     @Override
     public int getCount() {
-        return 5;
+        return dataList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return dataList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder=null;
         if (convertView==null){
             View content=inflater.inflate(R.layout.adapter_item_content,null);
@@ -57,9 +53,31 @@ public class SlideAdapter extends BaseAdapter implements View.OnClickListener{
         }else {
             holder= (ViewHolder) convertView.getTag();
         }
-        holder.itemTvDelete.setOnClickListener(this);
-        holder.itemTvNoRead.setOnClickListener(this);
-        holder.itemTvToTop.setOnClickListener(this);
+        holder.username.setText(dataList.get(position));
+        holder.itemTvDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataList.remove(position);
+                SlideAdapter.super.notifyDataSetInvalidated();
+                Toast.makeText(context,"删除啦",Toast.LENGTH_SHORT).show();
+            }
+        });
+        holder.itemTvNoRead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context,"这个没做",Toast.LENGTH_SHORT).show();
+            }
+        });
+        holder.itemTvToTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String s = dataList.get(position);
+                dataList.remove(position);
+                dataList.add(0, s);
+                SlideAdapter.super.notifyDataSetInvalidated();
+                Toast.makeText(context,"置顶了熬",Toast.LENGTH_SHORT).show();
+            }
+        });
         return convertView;
     }
 
@@ -67,28 +85,14 @@ public class SlideAdapter extends BaseAdapter implements View.OnClickListener{
         TextView itemTvToTop;
         TextView itemTvNoRead;
         TextView itemTvDelete;
+        TextView username;
 
         public ViewHolder(View center,View menu) {
             this.itemTvToTop = (TextView) menu.findViewById(R.id.item_to_top);
             this.itemTvNoRead = (TextView) menu.findViewById(R.id.item_no_read);
             this.itemTvDelete = (TextView) menu.findViewById(R.id.item_delete);
+            this.username = (TextView)center.findViewById(R.id.username);
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-//            case R.id.to_talk:
-//                Intent intent = new Intent(Talk);
-            case R.id.item_no_read:
-                Toast.makeText(context,"标为未读",Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.item_to_top:
-                Toast.makeText(context,"置顶了熬",Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.item_delete:
-                Toast.makeText(context,"删除啦",Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
 }

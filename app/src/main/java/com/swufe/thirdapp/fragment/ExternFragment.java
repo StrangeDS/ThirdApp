@@ -14,7 +14,7 @@ import com.swufe.thirdapp.R;
 public class ExternFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //        return super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.activity_login, container);
+        return inflater.inflate(R.layout.my, container);
     }
 
     @Override

@@ -29,20 +29,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.makeramen.roundedimageview.RoundedImageView;
-import com.swufe.thirdapp.MainActivity;
+import com.swufe.thirdapp.activity.MainActivity;
 import com.swufe.thirdapp.R;
 import com.swufe.thirdapp.adapter.SavedAdapter;
 import com.swufe.thirdapp.avatar.Avatar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
