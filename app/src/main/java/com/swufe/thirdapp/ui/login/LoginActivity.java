@@ -2,21 +2,14 @@ package com.swufe.thirdapp.ui.login;
 
 import android.app.Activity;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -34,22 +27,18 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.swufe.thirdapp.MainActivity;
 import com.swufe.thirdapp.R;
-import com.swufe.thirdapp.WelcomeActivity;
+import com.swufe.thirdapp.adapter.SavedAdapter;
 import com.swufe.thirdapp.avatar.Avatar;
-import com.swufe.thirdapp.ui.login.LoginViewModel;
-import com.swufe.thirdapp.ui.login.LoginViewModelFactory;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,16 +53,16 @@ public class LoginActivity extends AppCompatActivity {
     private String lastPassword = null;
     private String username = null;
     private String password = null;
-    private Spinner spinner = null;
-    private Button btn_spinner = null;
+    private ListView list = null;
+    private Button btn_list = null;
     private Button btn_delete = null;
     private Button btn_passvisible = null;
     private EditText usernameEditText = null;
     private EditText passwordEditText = null;
     private RoundedImageView roundedImageView = null;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private List<Map<String,Object>> usersaved = null;
-    private SimpleAdapter adapter = null;
+    private ArrayList<HashMap<String,String>> usersaved = null;
+    private SavedAdapter adapter = null;
     private boolean flag_passvisible = false;
     private static String[] PERMISSIONS_STORAGE = {
             "android.permission.READ_EXTERNAL_STORAGE",
@@ -105,8 +94,9 @@ public class LoginActivity extends AppCompatActivity {
         }
 
 
-        btn_spinner = findViewById(R.id.btn_spinner);
-        spinner = findViewById(R.id.spinner);
+        btn_list = findViewById(R.id.btn_list);
+        list = findViewById(R.id.saved_list);
+        list.setVisibility(list.INVISIBLE);
         roundedImageView = findViewById(R.id.roundedImageView);
         btn_delete = findViewById(R.id.btn_delete);
         btn_passvisible = findViewById((R.id.btn_passvisible));
@@ -115,19 +105,20 @@ public class LoginActivity extends AppCompatActivity {
 //        Avatar a1 = new Avatar("1023221456");
 //        a1.saveImage(bitmap);
 
-        sp = getSharedPreferences("last_login", MODE_PRIVATE);
+        sp = getSharedPreferences("loginstate", MODE_PRIVATE);
         lastUser = sp.getString("username", "");
         sp = getSharedPreferences(lastUser, MODE_PRIVATE);
         lastPassword = sp.getString("password", "");
+        Log.i("TAG", "lastUser:"+lastUser);
+        Log.i("TAG", "lastPassword"+lastPassword);
         Avatar a1 = new Avatar(lastUser);
         Bitmap bitmap = a1.getBitmap();
         if ((!lastUser.isEmpty()) & (!lastPassword.isEmpty())) {
-            btn_spinner.setVisibility(btn_spinner.VISIBLE);
+            Log.i("TAG", "初始化了的");
+            btn_list.setVisibility(btn_list.VISIBLE);
             usernameEditText.setText(lastUser);
             passwordEditText.setText(lastPassword);
             roundedImageView.setImageBitmap(bitmap);
-//            roundedImageView.setVisibility(roundedImageView.VISIBLE);
-//            Log.i("TAG", "user:"+lastUser+",pass:"+lastPassword+",avatar:"+roundedImageView);
         }
 
         btn_delete.setOnClickListener(new View.OnClickListener() {
@@ -160,28 +151,32 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        usersaved = getDat();
-        //创建一个SimpleAdapter适配器
-        //第一个参数：上下文，第二个参数：数据源，第三个参数：item子布局，第四、五个参数：键值对，获取item布局中的控件id
-        adapter = new SimpleAdapter(this, usersaved, R.layout.useritem, new String[]{"image", "username", "password"}, new int[]{R.id.avatar, R.id.username, R.id.password});
+        usersaved = getData();
+        adapter = new SavedAdapter(this, R.layout.useritem, usersaved);
         //控件与适配器绑定
-        spinner.setAdapter(adapter);
-        spinner.setSelection(0, true);
+        list.setAdapter(adapter);
         //点击事件
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String info=adapterView.getItemAtPosition(i).toString();//获取i所在的文本
                 Toast.makeText(LoginActivity.this,info,Toast.LENGTH_SHORT).show();
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
         });
 
+        btn_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(list.getVisibility() == list.VISIBLE){
+                    list.setVisibility(list.INVISIBLE);
+//            Toast.makeText(getApplicationContext(), "被点了", Toast.LENGTH_LONG).show();
+                }
+                else {
+                    list.setVisibility(list.VISIBLE);
+//            Toast.makeText(getApplicationContext(), "被点了", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -289,41 +284,28 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
 
-    private List<Map<String,Object>> getDat() {
-        List<Map<String,Object>> d = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
-        map.put("image", R.drawable.avatar);
+    private ArrayList<HashMap<String, String>> getData() {
+        ArrayList<HashMap<String, String>> d = new ArrayList<>();
+        HashMap<String, String> map = new HashMap<>();
+//        map.put("image", R.drawable.avatar);
         map.put("username", "北京");
         map.put("password", "BeiJing");
         d.add(map);
-        Map<String, Object> map1 = new HashMap<>();
-        map1.put("image", R.drawable.avatar);
+        HashMap<String, String> map1 = new HashMap<>();
+//        map1.put("image", R.drawable.avatar);
         map1.put("username", "上海");
         map1.put("password", "ShangHai");
         d.add(map1);
-        Map<String, Object> map2 = new HashMap<>();
-        map2.put("image", R.drawable.avatar);
+        HashMap<String, String> map2 = new HashMap<>();
+//        map2.put("image", R.drawable.avatar);
         map2.put("username", "廣州");
         map2.put("password", "GuangZhou");
         d.add(map2);
-        Map<String, Object> map3 = new HashMap<>();
-        map3.put("image", R.drawable.avatar);
+        HashMap<String, String> map3 = new HashMap<>();
+//        map3.put("image", R.drawable.avatar);
         map3.put("username", "深圳");
         map3.put("password", "ShenZhen");
         d.add(map3);
         return d;
     }
-
-    public void spinnerBtn(View btn){
-        if(spinner.isShown()){
-            spinner.performClick();
-//            Toast.makeText(getApplicationContext(), "被点了", Toast.LENGTH_LONG).show();
-        }
-        else {
-            spinner.performClick();
-//            Toast.makeText(getApplicationContext(), "被点了", Toast.LENGTH_LONG).show();
-        }
-    }
-
-
 }

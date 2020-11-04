@@ -67,24 +67,6 @@
             app:layout_constraintVertical_bias="0.500"
             app:riv_oval="true" />
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/spinner_icon"
-            android:dropDownWidth="280dp"
-            android:dropDownHorizontalOffset="-250dp"
-            android:dropDownVerticalOffset="40dp"
-            android:paddingLeft="-250dp"
-            android:transcriptMode="alwaysScroll"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/username"
-            app:layout_constraintEnd_toEndOf="@+id/username"
-            app:layout_constraintHorizontal_bias="0.920"
-            app:layout_constraintStart_toStartOf="@+id/username"
-            app:layout_constraintTop_toTopOf="@+id/username"
-            app:layout_constraintVertical_bias="0.500" />
-
         <EditText
             android:id="@+id/password"
             android:layout_width="0dp"
@@ -147,11 +129,10 @@
             app:layout_constraintVertical_bias="0.500" />
 
         <Button
-            android:id="@+id/btn_spinner"
+            android:id="@+id/btn_list"
             android:layout_width="10dp"
             android:layout_height="10dp"
             android:background="@drawable/spinner_icon"
-            android:onClick="spinnerBtn"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/username"
             app:layout_constraintEnd_toEndOf="@+id/username"
@@ -159,5 +140,16 @@
             app:layout_constraintStart_toStartOf="@+id/username"
             app:layout_constraintTop_toTopOf="@+id/username"
             app:layout_constraintVertical_bias="0.500" />
+
+        <ListView
+            android:id="@+id/saved_list"
+            android:layout_width="330dp"
+            android:layout_height="220dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/username"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/username"
+            app:layout_constraintTop_toBottomOf="@+id/username"
+            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

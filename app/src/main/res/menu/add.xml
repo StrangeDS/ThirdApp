@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/add_item"
-        android:title="Add"
+        android:title="没做了"
         android:icon="@drawable/delete"/>
     <item android:id="@+id/remove_item"
-        android:title="Remove"
+        android:title="再点也没反应"
         android:icon="@drawable/delete"/>
 </menu>
