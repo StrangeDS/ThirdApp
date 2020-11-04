@@ -1,82 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawerLayout"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".MainActivity">
-
-    <EditText
-        android:id="@+id/inp"
+    <FrameLayout
+        android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="@string/tips"
-        android:inputType="numberDecimal"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginTop="40dp"
-        android:text=""
-        android:autofillHints="" />
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <androidx.appcompat.widget.Toolbar
+                android:gravity="center_vertical"
+                android:id="@+id/toolbar"
+                app:titleTextAppearance="@style/Toolbar.Titlestyle"
+                app:subtitleTextAppearance="@style/Toolbar.Subtitlestyle"
+                android:paddingTop="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@drawable/gradient"
+                app:titleTextColor="@android:color/white"
+                app:subtitleTextColor="@android:color/white">
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:singleLine="true"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp" />
+            </androidx.appcompat.widget.Toolbar>
 
-    <TextView
-        android:id="@+id/outp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="32dp"
-        android:textSize="50sp"
-        android:text="@string/welcome" />
+<!--                app:navigationIcon="@drawable/spinner_icon"-->
+            <fragment
+                android:id="@+id/fragment_main"
+                android:name="com.swufe.thirdapp.fragment.MainFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="10">
+            </fragment>
 
-    <Button
-        android:id="@+id/btn1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginBottom="15dp"
-        android:onClick="btn"
-        android:text="@string/D1" />
+            <fragment
+                android:id="@+id/fragment_friends"
+                android:name="com.swufe.thirdapp.fragment.FriendsFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="10">
+            </fragment>
 
-    <Button
-        android:id="@+id/btn2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginBottom="15dp"
-        android:onClick="btn"
-        android:text="@string/D2" />
+            <fragment
+                android:id="@+id/fragment_extern"
+                android:name="com.swufe.thirdapp.fragment.ExternFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="10">>
 
-    <Button
-        android:id="@+id/btn3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginBottom="25dp"
-        android:onClick="btn"
-        android:text="@string/D3" />
+            </fragment>
+            <RadioGroup
+                android:id="@+id/button_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1">>
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:button="@null"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:id="@+id/button_home">
+                </RadioButton>
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:button="@null"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:id="@+id/button_friends">
+                </RadioButton>
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:button="@null"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:id="@+id/button_extern">
+                </RadioButton>
 
-    <Button
-        android:id="@+id/btn_config"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginBottom="25dp"
-        android:onClick="btn_conifg"
-        android:text="@string/config" />
+            </RadioGroup>
+        </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_show"
+
+    </FrameLayout>
+
+    <!--侧边栏内容-->
+    <FrameLayout
+        android:id="@+id/left_frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:onClick="btn_show"
-        android:text="@string/show" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_gravity="start">
+
+        <include layout="@layout/left"/>
+    </FrameLayout>
+
+
+<!--    <FrameLayout-->
+<!--        android:id="@+id/extern_frame"-->
+<!--        android:layout_width="150dp"-->
+<!--        android:layout_height="wrap_content">-->
+
+<!--        <include layout="@layout/activity_login"/>-->
+<!--    </FrameLayout>-->
+
+
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <com.swufe.thirdapp.refreshableview.RefreshableView
+        android:id="@+id/refreshable_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <com.swufe.thirdapp.slidelistview.SlideListView
+            android:id="@+id/list_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:divider="@null">
+        </com.swufe.thirdapp.slidelistview.SlideListView>
+    </com.swufe.thirdapp.refreshableview.RefreshableView>
+
+</LinearLayout>
