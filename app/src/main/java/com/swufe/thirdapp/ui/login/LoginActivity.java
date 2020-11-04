@@ -159,8 +159,10 @@ public class LoginActivity extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String info=adapterView.getItemAtPosition(i).toString();//获取i所在的文本
-                Toast.makeText(LoginActivity.this,info,Toast.LENGTH_SHORT).show();
+//                String info=adapterView.getItemAtPosition(i).toString();//获取i所在的文本
+//                Toast.makeText(LoginActivity.this,info,Toast.LENGTH_SHORT).show();
+                usernameEditText.setText(  ((HashMap<String, String>)adapter.getItem(i)).get("username"));
+                passwordEditText.setText(  ((HashMap<String, String>)adapter.getItem(i)).get("password"));
             }
         });
 
