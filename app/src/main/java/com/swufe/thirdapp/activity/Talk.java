@@ -37,15 +37,15 @@ public class Talk extends AppCompatActivity implements Runnable {
         setStatusBar();//透明标题栏
         setContentView(R.layout.activity_talk);
 
+        //消息记录list填充
         Thread t = new Thread(Talk.this);
         t.run();
-        //界面初始化
-//        intent = getIntent();
-//        name = intent.getStringExtra("username");
-        name = "奇怪的人";
-        if(name.equals("")){
-            intent.setClass(this, LoginActivity.class);
-            startActivity(intent);
+
+//        界面初始化
+        intent = getIntent();
+        name = intent.getStringExtra("name");
+        if(name == null){
+            name = "陌生人";
         }
         toolbar = (Toolbar)findViewById(R.id.talk_toolbar);
         title = (TextView)findViewById(R.id.name);
@@ -53,6 +53,10 @@ public class Talk extends AppCompatActivity implements Runnable {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//        返回最后一条消息
+                intent = new Intent();
+                intent.putExtra("new_text", ((HashMap<String, String>)adapter.getItem(adapter.getCount()-1)).get("text"));
+                setResult(1,intent);
                 Talk.this.finish();
             }
         });
@@ -70,7 +74,7 @@ public class Talk extends AppCompatActivity implements Runnable {
                 text.setText("");
             }
         });
-        //消息记录list填充
+
     }
 
     //状态栏透明函数

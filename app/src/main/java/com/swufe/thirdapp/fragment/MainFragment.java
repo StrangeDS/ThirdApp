@@ -26,12 +26,13 @@ public class MainFragment extends Fragment {
 //    List<HashMap<String, String>> data = new ArrayList<>();
     private SlideAdapter adapter = null;
     private RefreshableView refreshableView = null;
+    private int record;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        list.add("ss1ss");
-        list.add("ss2ss");
-        list.add("ss3ss");
+        list.add("张三");
+        list.add("李四");
+        list.add("王麻子");
         View view = inflater.inflate(R.layout.news, null);
         listView = (SlideListView) view.findViewById(R.id.list_view);
         adapter = new SlideAdapter(view.getContext(), list);
@@ -52,9 +53,11 @@ public class MainFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 //                Toast.makeText(view.getContext(),"跳转",Toast.LENGTH_SHORT).show();
+                record = i;
                 Intent intent = new Intent(view.getContext(), Talk.class);
-//                intent.putExtra("name", adapter.getItem(i).);
-                startActivity(intent);
+                intent.putExtra("name", adapter.getItem(i).toString());
+                startActivityForResult(intent, 1);
+//                startActivity(intent);
             }
         });
         return view;
@@ -65,4 +68,18 @@ public class MainFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode == 1){
+            switch (requestCode) {
+                case 1:
+                    list.set(record, data.getStringExtra("new_text"));
+                    adapter.notifyDataSetChanged();
+                    break;
+                case 0:
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }

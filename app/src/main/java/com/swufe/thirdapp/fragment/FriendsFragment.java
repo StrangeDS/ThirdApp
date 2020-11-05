@@ -18,9 +18,10 @@ import com.swufe.thirdapp.activity.Talk;
 import com.swufe.thirdapp.adapter.FriendsAdapter;
 
 public class FriendsFragment extends Fragment {
-    private ExpandableListView elvCompany;
-    private TextView tvLoadMore;
-    private View view;
+    private ExpandableListView elvCompany = null;
+    private TextView tvLoadMore= null;
+    private FriendsAdapter adapter = null;
+    private View view = null;
     // 群组名称（一级条目内容）
     private String[] group = new String[] { "我的好友", "陌生人"};
     private String[] carsList = new String[] { "张三", "李四", "王五", "赵六"};
@@ -29,7 +30,7 @@ public class FriendsFragment extends Fragment {
         view = inflater.inflate(R.layout.friends, null);
         tvLoadMore = (TextView) view.findViewById(R.id.tv_load_more);
         elvCompany = (ExpandableListView) view.findViewById(R.id.android_list);
-        FriendsAdapter adapter = new FriendsAdapter(group, carsList, getContext());
+        adapter = new FriendsAdapter(group, carsList, getContext());
         elvCompany.setAdapter(adapter);
 
         setListeners();
@@ -63,7 +64,7 @@ public class FriendsFragment extends Fragment {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 //                Toast.makeText(getActivity(), group[groupPosition] + ":" + carsList[childPosition], Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(view.getContext(), Talk.class);
-//                intent.putExtra("name", adapter.getItem(i).);
+                intent.putExtra("name", adapter.getChild(groupPosition, childPosition).toString());
                 startActivity(intent);
                 return true;
             }

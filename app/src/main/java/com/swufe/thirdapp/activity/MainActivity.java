@@ -64,6 +64,7 @@ public class MainActivity extends FragmentActivity {
         return true;
     }
 
+    //据说下面这个重写能显示icon，但我并没有成功
     @Override
     public boolean onMenuOpened(int featureId, Menu menu) {
         if (menu != null) {
@@ -80,21 +81,6 @@ public class MainActivity extends FragmentActivity {
         return super.onMenuOpened(featureId, menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Log.i("TAG","???");
-        switch (item.getItemId()) {
-
-            case R.id.add_item:
-                break;
-
-            case R.id.remove_item:
-                Log.i("TAG","???");
-                Toast.makeText(MainActivity.this, "菜单里面没有彩蛋", Toast.LENGTH_SHORT).show();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @SuppressLint({"ResourceType", "UseCompatLoadingForDrawables"})
     @Override
@@ -154,7 +140,15 @@ public class MainActivity extends FragmentActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                return false;
+                switch (item.getItemId()) {
+                    case R.id.add_item:
+                        break;
+                    case R.id.remove_item:
+                        Log.i("TAG","???");
+                        Toast.makeText(MainActivity.this, "菜单里面没有彩蛋", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return true;
             }
         });
         //注销按钮
