@@ -144,7 +144,6 @@ public class MainActivity extends FragmentActivity {
                     case R.id.add_item:
                         break;
                     case R.id.remove_item:
-                        Log.i("TAG","???");
                         Toast.makeText(MainActivity.this, "菜单里面没有彩蛋", Toast.LENGTH_SHORT).show();
                         break;
                 }
