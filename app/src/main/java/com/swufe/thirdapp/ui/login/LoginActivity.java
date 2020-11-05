@@ -106,12 +106,9 @@ public class LoginActivity extends AppCompatActivity {
         lastUser = sp.getString("username", "");
         sp = getSharedPreferences(lastUser, MODE_PRIVATE);
         lastPassword = sp.getString("password", "");
-        Log.i("TAG", "lastUser:"+lastUser);
-        Log.i("TAG", "lastPassword"+lastPassword);
         Avatar a1 = new Avatar(lastUser);
         Bitmap bitmap = a1.getBitmap();
         if ((!lastUser.isEmpty()) & (!lastPassword.isEmpty())) {
-            Log.i("TAG", "初始化了的");
             btn_list.setVisibility(btn_list.VISIBLE);
             usernameEditText.setText(lastUser);
             passwordEditText.setText(lastPassword);
@@ -160,6 +157,8 @@ public class LoginActivity extends AppCompatActivity {
 //                Toast.makeText(LoginActivity.this,info,Toast.LENGTH_SHORT).show();
                 usernameEditText.setText(  ((HashMap<String, String>)adapter.getItem(i)).get("username"));
                 passwordEditText.setText(  ((HashMap<String, String>)adapter.getItem(i)).get("password"));
+                list.setVisibility(list.INVISIBLE);
+                loginButton.setVisibility(loginButton.VISIBLE);
             }
         });
 
@@ -168,10 +167,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(list.getVisibility() == list.VISIBLE){
                     list.setVisibility(list.INVISIBLE);
+                    loginButton.setVisibility(loginButton.VISIBLE);
 //            Toast.makeText(getApplicationContext(), "被点了", Toast.LENGTH_LONG).show();
                 }
                 else {
                     list.setVisibility(list.VISIBLE);
+                    loginButton.setVisibility(loginButton.INVISIBLE);
 //            Toast.makeText(getApplicationContext(), "被点了", Toast.LENGTH_LONG).show();
                 }
             }
